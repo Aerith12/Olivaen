@@ -21,55 +21,105 @@
   --gold-pale:   #f0dfa0;
   --dust:        #6a5c3e;
   --dust-lt:     #9a8a6a;
+  --terracotta:  #c4724a;
+  --cream:       #f2e6ce;
   --border:      rgba(28,58,14,0.13);
   --border-gold: rgba(184,134,26,0.25);
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--parchment);color:var(--ink);font-family:'Crimson Pro',Georgia,serif;font-weight:400;min-height:100vh;overflow-x:hidden;cursor:none;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:var(--parchment);
+  color:var(--ink);
+  font-family:'Crimson Pro',Georgia,serif;
+  font-weight:400;
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.022;pointer-events:none;z-index:500;}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 18%,rgba(212,164,56,0.11) 0%,transparent 68%);pointer-events:none;z-index:0;}
+/* Grain overlay — lightweight PNG data URI instead of SVG filter */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Gy7XdKxA9RCcjj5Cn0k/0nk5kxRw+RxE2l49evk577Iv+J7u6zJRfEz7G+cv7y//tfMD99f+F/gX8D/wT/Cj8O/zn/E/4r/mn+J/6z/if+gADAOsCPwcCAAAAAWEBhgZCAAAAAElFTkSuQmCC");
+  background-repeat:repeat;
+  opacity:.018;
+  pointer-events:none;
+  z-index:500;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 18%,rgba(212,164,56,0.10) 0%,transparent 68%);
+  pointer-events:none;z-index:0;
+}
 
-.cursor{position:fixed;width:6px;height:6px;background:var(--grove);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
-.cursor-ring{position:fixed;width:30px;height:30px;border:1px solid rgba(28,58,14,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s,border-color .22s;}
+/* Custom cursor — DESKTOP ONLY */
+@media (pointer:fine) {
+  body { cursor:none; }
+  .cursor{position:fixed;width:6px;height:6px;background:var(--grove);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:transform;}
+  .cursor-ring{position:fixed;width:30px;height:30px;border:1px solid rgba(28,58,14,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s,border-color .22s;mix-blend-mode:difference;will-change:transform;}
+  a,button,input{cursor:none;}
+}
+@media (pointer:coarse),(hover:none) {
+  .cursor,.cursor-ring{display:none!important;}
+  a,button,input{cursor:auto;}
+}
 
+/* Reveal-on-scroll base */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.12s;}
+.reveal-delay-2{transition-delay:.24s;}
+.reveal-delay-3{transition-delay:.36s;}
+
+/* Hero animations — these still fire on load */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes bloom{from{opacity:0;transform:scale(.88) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 .page{max-width:760px;margin:0 auto;padding:0 2.4rem;position:relative;z-index:1;}
 
+/* Header */
 header{display:flex;justify-content:space-between;align-items:center;padding:2rem 0 0;opacity:0;animation:fadeIn .8s .15s forwards;}
 .h-tag{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.4em;text-transform:uppercase;color:var(--dust);}
 
-.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:4rem 0 0;}
+/* Hero */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:3.5rem 0 0;}
 
-.whisper{font-family:'Crimson Pro',serif;font-style:italic;font-size:clamp(1rem,2.4vw,1.15rem);color:var(--dust);line-height:1.65;max-width:400px;opacity:0;animation:fadeUp 1s .4s forwards;margin-bottom:2rem;}
+.logomark{width:88px;height:88px;opacity:0;animation:bloom 1.1s .3s forwards;margin-bottom:1.4rem;}
 
-.logomark{width:96px;height:96px;opacity:0;animation:bloom 1.1s .6s forwards;margin-bottom:1.8rem;}
+.wordmark{font-family:'Playfair Display',serif;font-size:clamp(3.6rem,11vw,8rem);font-weight:400;letter-spacing:.22em;color:var(--grove);line-height:1;opacity:0;animation:fadeUp 1.2s .5s forwards;}
 
-.wordmark{font-family:'Playfair Display',serif;font-size:clamp(4rem,12vw,8.5rem);font-weight:400;letter-spacing:.2em;color:var(--grove);line-height:1;opacity:0;animation:fadeUp 1.2s .8s forwards;}
-
-.subtitle-row{display:flex;align-items:center;gap:.9rem;margin-top:1rem;opacity:0;animation:fadeUp 1s 1.05s forwards;}
+.subtitle-row{display:flex;align-items:center;gap:.9rem;margin-top:.9rem;opacity:0;animation:fadeUp 1s .75s forwards;}
 .sub-line{width:28px;height:1px;background:rgba(184,134,26,.45);}
 .sub-text{font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);}
 
-.hero-stmt{font-family:'Outfit',sans-serif;font-size:clamp(1rem,2.5vw,1.2rem);font-weight:400;color:var(--grove);line-height:1.75;max-width:380px;margin-top:2rem;opacity:0;animation:fadeUp 1s 1.3s forwards;}
+.whisper{font-family:'Crimson Pro',serif;font-style:italic;font-size:clamp(1rem,2.4vw,1.15rem);color:var(--dust);line-height:1.65;max-width:400px;opacity:0;animation:fadeUp 1s .95s forwards;margin-top:1.8rem;}
+
+.hero-stmt{font-family:'Outfit',sans-serif;font-size:clamp(.95rem,2.3vw,1.15rem);font-weight:400;color:var(--grove);line-height:1.75;max-width:380px;margin-top:1.6rem;opacity:0;animation:fadeUp 1s 1.15s forwards;}
 .hero-stmt em{font-style:italic;color:var(--gold);font-family:'Crimson Pro',serif;}
 
-.hero-cta{margin-top:2.4rem;opacity:0;animation:fadeUp 1s 1.6s forwards;display:flex;flex-direction:column;align-items:center;gap:.65rem;}
-.btn-reserve{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--warm-white);background:var(--grove);border:none;padding:1.1rem 3rem;cursor:none;text-decoration:none;display:inline-block;transition:background .25s,transform .2s,box-shadow .25s;}
+.hero-cta{margin-top:2.2rem;opacity:0;animation:fadeUp 1s 1.4s forwards;display:flex;flex-direction:column;align-items:center;gap:.65rem;}
+.btn-reserve{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--warm-white);background:var(--grove);border:none;padding:1.1rem 3rem;text-decoration:none;display:inline-block;transition:background .25s,transform .2s,box-shadow .25s;min-height:48px;display:flex;align-items:center;justify-content:center;}
 .btn-reserve:hover{background:var(--grove-mid);transform:translateY(-2px);box-shadow:0 8px 28px rgba(28,58,14,.2);}
 .cta-note{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);}
 
-.botanical{display:flex;justify-content:center;margin:4rem 0 0;opacity:0;animation:fadeIn 1.2s 2s forwards;}
+/* Botanical divider */
+.botanical{display:flex;justify-content:center;margin:3.5rem 0 0;opacity:0;animation:fadeIn 1.2s 1.8s forwards;}
 
-.for-you{margin:4.5rem 0 0;opacity:0;animation:fadeUp 1s 2.1s forwards;}
-.for-you-label{font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--grove);text-align:center;display:block;margin-bottom:2rem;}
+/* Grove coordinates badge */
+.grove-badge{display:flex;align-items:center;justify-content:center;gap:1.4rem;margin:3.5rem 0 0;padding:1.2rem 0;border-top:1px solid rgba(184,134,26,.15);border-bottom:1px solid rgba(184,134,26,.15);}
+.grove-badge-item{display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+.grove-badge-val{font-family:'Playfair Display',serif;font-size:1rem;color:var(--grove);font-weight:500;letter-spacing:.02em;}
+.grove-badge-lbl{font-family:'Outfit',sans-serif;font-size:.55rem;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--dust-lt);}
+.grove-badge-sep{width:1px;height:24px;background:rgba(184,134,26,.2);}
+
+/* Who this is for */
+.for-you{margin:4rem 0 0;}
+.for-you-label{font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--grove);text-align:center;display:block;margin-bottom:1.8rem;}
 .for-you-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
-.fy-card{background:var(--warm-white);padding:1.8rem 1.5rem 2rem;display:flex;flex-direction:column;gap:.7rem;transition:background .2s;position:relative;overflow:hidden;}
+.fy-card{background:var(--warm-white);padding:1.8rem 1.5rem 2rem;display:flex;flex-direction:column;gap:.7rem;transition:background .25s;position:relative;overflow:hidden;}
 .fy-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-pale),transparent);opacity:0;transition:opacity .3s;}
 .fy-card:hover{background:#fdfaf2;}
 .fy-card:hover::after{opacity:1;}
@@ -77,7 +127,8 @@ header{display:flex;justify-content:space-between;align-items:center;padding:2re
 .fy-who{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;color:var(--grove);line-height:1.3;}
 .fy-why{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--dust);line-height:1.65;}
 
-.poly-section{margin:5.5rem 0 0;display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;opacity:0;animation:fadeUp 1s 2.3s forwards;}
+/* Polyphenol section */
+.poly-section{margin:5rem 0 0;display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;}
 .poly-left{display:flex;flex-direction:column;gap:.8rem;}
 .poly-number{font-family:'Playfair Display',serif;font-size:clamp(3.8rem,10vw,6.5rem);font-weight:700;color:var(--grove);line-height:1;letter-spacing:-.02em;}
 .poly-unit{font-family:'Outfit',sans-serif;font-size:1rem;font-weight:500;letter-spacing:.18em;color:var(--gold);}
@@ -89,26 +140,45 @@ header{display:flex;justify-content:space-between;align-items:center;padding:2re
 .poly-fact-num{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold);line-height:1;flex-shrink:0;font-weight:500;}
 .poly-fact-txt{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--dust);line-height:1.6;}
 
-.pillars{display:grid;grid-template-columns:repeat(3,1fr);margin:5rem 0 0;background:var(--border);gap:1px;opacity:0;animation:fadeUp 1s 2.5s forwards;}
-.pillar{background:var(--warm-white);padding:2rem 1.5rem 2.2rem;display:flex;flex-direction:column;gap:.35rem;transition:background .2s;}
+/* Pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);margin:5rem 0 0;background:var(--border);gap:1px;}
+.pillar{background:var(--warm-white);padding:2rem 1.5rem 2.2rem;display:flex;flex-direction:column;gap:.35rem;transition:background .25s;}
 .pillar:hover{background:#fdfaf2;}
 .pillar-stat{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:500;color:var(--grove);line-height:1;}
 .pillar-title{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:.4rem;}
 .pillar-body{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--dust);line-height:1.65;margin-top:.5rem;}
 
-.story-section{margin:5.5rem 0 0;opacity:0;animation:fadeUp 1s 2.7s forwards;}
+/* Story */
+.story-section{margin:5.5rem 0 0;}
 .story-eyebrow{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.36em;text-transform:uppercase;color:var(--dust);display:block;margin-bottom:2rem;}
 .story-text{display:flex;flex-direction:column;gap:1.4rem;}
 .story-text p{font-family:'Crimson Pro',serif;font-size:clamp(1rem,2.4vw,1.12rem);font-weight:400;color:var(--ink);line-height:1.9;max-width:620px;}
 .story-text p:first-child::first-line{font-style:italic;color:var(--grove-mid);}
 
-.mom-quote{margin:4rem 0 0;padding:3.5rem 0 3.5rem 2.5rem;border-left:2px solid var(--gold);opacity:0;animation:fadeUp 1s 2.9s forwards;position:relative;}
+/* Mom quote */
+.mom-quote{margin:4rem 0 0;padding:3.5rem 0 3.5rem 2.5rem;border-left:2px solid var(--gold);position:relative;}
 .mq-bg{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(212,164,56,.06),transparent 60%);pointer-events:none;}
 .mq-mark{font-family:'Playfair Display',serif;font-size:3.8rem;line-height:.75;color:var(--gold-lt);display:block;margin-bottom:.9rem;font-style:italic;opacity:.7;}
 .mq-text{font-family:'Crimson Pro',serif;font-size:clamp(1.1rem,2.8vw,1.4rem);font-style:italic;color:var(--grove);line-height:1.75;font-weight:400;position:relative;}
 .mq-attr{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--dust);display:block;margin-top:1.4rem;position:relative;}
 
-.countdown-section{margin:5rem 0 0;display:flex;flex-direction:column;align-items:center;gap:1.2rem;opacity:0;animation:fadeUp 1s 3s forwards;}
+/* Grove visual interlude */
+.grove-visual{margin:5rem 0 0;position:relative;overflow:hidden;height:220px;border-radius:0;}
+.grove-visual-inner{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 30% 60%, rgba(70,122,42,.22), transparent),
+    radial-gradient(ellipse 50% 70% at 75% 40%, rgba(28,58,14,.15), transparent),
+    radial-gradient(ellipse 40% 50% at 50% 80%, rgba(184,134,26,.10), transparent),
+    linear-gradient(180deg, var(--parchment) 0%, var(--cream) 30%, rgba(196,114,74,.08) 60%, var(--parchment) 100%);
+}
+.grove-visual-text{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);text-align:center;}
+.grove-visual-text span{font-family:'Outfit',sans-serif;font-size:.58rem;font-weight:400;letter-spacing:.4em;text-transform:uppercase;color:var(--dust-lt);}
+
+/* Tree silhouettes inside the visual */
+.grove-trees{position:absolute;bottom:0;left:0;right:0;height:160px;display:flex;justify-content:center;align-items:flex-end;gap:2.5rem;opacity:.12;}
+
+/* Countdown */
+.countdown-section{margin:4.5rem 0 0;display:flex;flex-direction:column;align-items:center;gap:1.2rem;}
 .cd-eyebrow{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:400;letter-spacing:.38em;text-transform:uppercase;color:var(--dust);}
 .countdown-display{display:flex;align-items:center;gap:.5rem;}
 .cd-unit{display:flex;flex-direction:column;align-items:center;gap:.18rem;min-width:58px;}
@@ -116,53 +186,82 @@ header{display:flex;justify-content:space-between;align-items:center;padding:2re
 .cd-lbl{font-family:'Outfit',sans-serif;font-size:.55rem;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:var(--dust-lt);}
 .cd-dot{font-size:1.2rem;color:var(--border-gold);margin-bottom:.7rem;}
 
-.reserve-section{margin:4rem 0 0;display:flex;flex-direction:column;align-items:center;gap:1rem;opacity:0;animation:fadeUp 1s 3.1s forwards;}
+/* Reserve / waitlist */
+.reserve-section{margin:4rem 0 0;display:flex;flex-direction:column;align-items:center;gap:1rem;}
 .reserve-head{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3vw,1.6rem);font-style:italic;color:var(--grove);text-align:center;line-height:1.4;}
 .reserve-sub{font-family:'Crimson Pro',serif;font-size:1rem;color:var(--dust);text-align:center;max-width:340px;line-height:1.65;font-style:italic;}
 .form-row{display:flex;gap:0;width:100%;max-width:430px;margin-top:.5rem;}
-.email-input{flex:1;font-family:'Crimson Pro',serif;font-size:1rem;background:var(--warm-white);border:1px solid var(--border);border-right:none;padding:.9rem 1.2rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.email-input{flex:1;font-family:'Crimson Pro',serif;font-size:1rem;background:var(--warm-white);border:1px solid var(--border);border-right:none;padding:.9rem 1.2rem;color:var(--ink);outline:none;transition:border-color .2s;min-height:48px;}
 .email-input::placeholder{color:var(--dust-lt);font-style:italic;}
 .email-input:focus{border-color:var(--grove-lt);}
-.submit-btn{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;background:var(--grove);color:var(--parchment);border:none;padding:.9rem 1.7rem;cursor:none;white-space:nowrap;transition:background .2s;}
+.submit-btn{font-family:'Outfit',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;background:var(--grove);color:var(--parchment);border:none;padding:.9rem 1.7rem;white-space:nowrap;transition:background .2s;min-height:48px;}
 .submit-btn:hover{background:var(--grove-mid);}
 .success-msg{display:none;font-family:'Crimson Pro',serif;font-style:italic;font-size:1.05rem;color:var(--grove);text-align:center;padding:1rem 0;line-height:1.65;}
 .form-note{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--dust);text-align:center;}
 .perks{display:flex;gap:1.6rem;flex-wrap:wrap;justify-content:center;}
 .perk{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:var(--dust);display:flex;align-items:center;gap:.45rem;}
 .perk-dot{width:3px;height:3px;background:var(--gold);border-radius:50%;flex-shrink:0;}
-.spots-wrap{width:100%;max-width:430px;margin-top:.5rem;}
-.spots-header{display:flex;justify-content:space-between;margin-bottom:.45rem;}
-.spots-claimed,.spots-left{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;}
-.spots-claimed{color:var(--grove-lt);}
-.spots-left{color:var(--dust);}
-.spots-track{height:2px;background:rgba(28,58,14,.1);overflow:hidden;}
-.spots-fill{height:100%;background:linear-gradient(90deg,var(--grove-lt),var(--gold));width:0%;transition:width 1.8s cubic-bezier(.4,0,.2,1) 3.5s;}
+.spots-wrap{display:none;}
 
-footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;opacity:0;animation:fadeIn 1s 3.5s forwards;}
+.next-step{font-family:'Crimson Pro',serif;font-style:italic;font-size:.95rem;color:var(--dust);text-align:center;max-width:380px;line-height:1.65;margin-top:.6rem;}
+
+/* Footer */
+footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;}
 .footer-id{display:flex;flex-direction:column;gap:.2rem;}
 .footer-id span{font-family:'Crimson Pro',serif;font-size:.95rem;color:var(--dust);line-height:1.7;}
 .footer-links{display:flex;gap:1.6rem;align-items:center;}
-.footer-link{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--dust);text-decoration:none;transition:color .2s;}
+.footer-link{font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--dust);text-decoration:none;transition:color .2s;padding:.4rem 0;min-height:44px;display:flex;align-items:center;}
 .footer-link:hover{color:var(--grove);}
 
+/* ──────────────────── MOBILE ──────────────────── */
+
 @media(max-width:680px){
-  .page{padding:0 1.3rem;}
-  .for-you-cards{grid-template-columns:1fr;}
-  .pillars{grid-template-columns:1fr;}
-  .pillar{border-bottom:1px solid var(--border);}
-  .pillar:last-child{border-bottom:none;}
+  .page{padding:0 1.5rem;}
+
+  .hero{padding:2.5rem 0 0;}
+  .logomark{width:72px;height:72px;}
+  .wordmark{letter-spacing:.16em;}
+
+  .grove-badge{gap:.8rem;padding:1rem 0;flex-wrap:wrap;justify-content:center;}
+  .grove-badge-val{font-size:.9rem;}
+
+  .for-you-cards{grid-template-columns:1fr;gap:0;}
+  .fy-card{border-bottom:1px solid var(--border);}
+  .fy-card:last-child{border-bottom:none;}
+  .fy-card{padding:1.5rem 1.2rem;}
+
   .poly-section{grid-template-columns:1fr;gap:2rem;}
   .poly-number{font-size:clamp(3.2rem,18vw,4.8rem);}
+
+  .pillars{grid-template-columns:1fr;gap:0;}
+  .pillar{border-bottom:1px solid var(--border);padding:1.6rem 1.2rem 1.8rem;}
+  .pillar:last-child{border-bottom:none;}
+
   .mom-quote{padding:2rem 0 2rem 1.5rem;}
-  .form-row{flex-direction:column;}
-  .email-input{border-right:1px solid var(--border);}
-  .submit-btn{padding:.9rem;}
-  .countdown-display{gap:.3rem;}
-  .cd-num{font-size:2rem;}
-  .cd-unit{min-width:46px;}
+
+  .grove-visual{height:160px;}
+
+  .form-row{flex-direction:column;gap:.6rem;}
+  .email-input{border-right:1px solid var(--border);border-radius:0;}
+  .submit-btn{padding:1rem;min-height:48px;}
+
+  .countdown-display{gap:.25rem;}
+  .cd-num{font-size:1.8rem;}
+  .cd-unit{min-width:42px;}
+
   footer{flex-direction:column;gap:1.4rem;align-items:flex-start;}
-  .perks{gap:1rem;}
+
+  .perks{gap:.8rem;}
+  .perk{font-size:.58rem;}
 }
+
+@media(max-width:400px){
+  .page{padding:0 1.1rem;}
+  .wordmark{letter-spacing:.12em;font-size:clamp(2.8rem,14vw,3.6rem);}
+  .sub-text{font-size:.6rem;letter-spacing:.3em;}
+  .grove-badge{gap:.5rem;}
+}
+
 </style>
 </head>
 <body>
@@ -178,8 +277,6 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
   </header>
 
   <section class="hero">
-
-    <p class="whisper">From a grove that has never seen a chemical. Not once in three generations.</p>
 
     <svg class="logomark" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M38 68 C37.5 56 37 44 38 28 C38.4 21 38.7 15 38 9" stroke="#1c3a0e" stroke-width="1.7" stroke-linecap="round"/>
@@ -198,6 +295,8 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
       <span class="sub-text">Extra Virgin Olive Oil</span>
       <div class="sub-line"></div>
     </div>
+
+    <p class="whisper">From a grove that has never seen a chemical.<br>Not once in three generations.</p>
 
     <p class="hero-stmt">
       500 numbered bottles from a family grove in Sfax.<br>
@@ -223,7 +322,30 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </svg>
   </div>
 
-  <section class="for-you">
+  <!-- Grove coordinates — social proof / specificity -->
+  <div class="grove-badge reveal">
+    <div class="grove-badge-item">
+      <span class="grove-badge-val">33.7°N</span>
+      <span class="grove-badge-lbl">Latitude</span>
+    </div>
+    <div class="grove-badge-sep"></div>
+    <div class="grove-badge-item">
+      <span class="grove-badge-val">10.7°E</span>
+      <span class="grove-badge-lbl">Longitude</span>
+    </div>
+    <div class="grove-badge-sep"></div>
+    <div class="grove-badge-item">
+      <span class="grove-badge-val">Chemlali</span>
+      <span class="grove-badge-lbl">Cultivar</span>
+    </div>
+    <div class="grove-badge-sep"></div>
+    <div class="grove-badge-item">
+      <span class="grove-badge-val">3rd Gen</span>
+      <span class="grove-badge-lbl">Family</span>
+    </div>
+  </div>
+
+  <section class="for-you reveal">
     <span class="for-you-label">Who this is for</span>
     <div class="for-you-cards">
       <div class="fy-card">
@@ -244,7 +366,7 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </div>
   </section>
 
-  <section class="poly-section">
+  <section class="poly-section reveal">
     <div class="poly-left">
       <div class="poly-number">400–<br>600</div>
       <div class="poly-unit">mg / kg</div>
@@ -260,11 +382,11 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </div>
   </section>
 
-  <div class="pillars">
+  <div class="pillars reveal">
     <div class="pillar">
       <span class="pillar-stat">3rd</span>
       <span class="pillar-title">The Grove</span>
-      <p class="pillar-body">Hatem's grandfather farmed these trees his whole life without chemicals. His mother kept it the same way. Hatem is the one who finally bottled it.</p>
+      <p class="pillar-body">My grandfather farmed these trees his whole life without chemicals. My mother kept it the same way. I am the one who finally bottled it.</p>
     </div>
     <div class="pillar">
       <span class="pillar-stat">&lt;0.3%</span>
@@ -278,7 +400,7 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </div>
   </div>
 
-  <section class="story-section">
+  <section class="story-section reveal">
     <span class="story-eyebrow">The Story</span>
     <div class="story-text">
       <p>My grandfather never left Sfax. He was born near these trees, and he grew old beside them. Every morning, before the sun was fully up, he was already out there. Walking the rows, checking the soil, talking to them the way some people talk to God. He never used a single chemical. Not because he knew the science. Because he respected what was already there.</p>
@@ -287,14 +409,32 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </div>
   </section>
 
-  <blockquote class="mom-quote">
+  <blockquote class="mom-quote reveal">
     <div class="mq-bg"></div>
     <span class="mq-mark">"</span>
     <p class="mq-text">When you had a talent you loved, but it never came true... and then somebody comes from you and turns that dream into reality.</p>
     <span class="mq-attr">· My mother, Sfax, Tunisia</span>
   </blockquote>
 
-  <section class="countdown-section">
+  <!-- Grove atmosphere -->
+  <div class="grove-visual reveal">
+    <div class="grove-visual-inner"></div>
+    <svg class="grove-trees" viewBox="0 0 400 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="140" x2="60" y2="50" stroke="#1c3a0e" stroke-width="3"/>
+      <ellipse cx="60" cy="38" rx="28" ry="30" fill="#1c3a0e"/>
+      <line x1="160" y1="140" x2="160" y2="30" stroke="#1c3a0e" stroke-width="3.5"/>
+      <ellipse cx="160" cy="20" rx="35" ry="28" fill="#1c3a0e"/>
+      <line x1="260" y1="140" x2="260" y2="55" stroke="#1c3a0e" stroke-width="2.8"/>
+      <ellipse cx="260" cy="42" rx="25" ry="26" fill="#1c3a0e"/>
+      <line x1="340" y1="140" x2="340" y2="40" stroke="#1c3a0e" stroke-width="3.2"/>
+      <ellipse cx="340" cy="28" rx="30" ry="25" fill="#1c3a0e"/>
+    </svg>
+    <div class="grove-visual-text">
+      <span>From the groves of Sfax · 33.7°N, 10.7°E</span>
+    </div>
+  </div>
+
+  <section class="countdown-section reveal">
     <span class="cd-eyebrow">First harvest · October 2026</span>
     <div class="countdown-display">
       <div class="cd-unit"><span class="cd-num" id="cd-days">00</span><span class="cd-lbl">Days</span></div>
@@ -307,7 +447,7 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
     </div>
   </section>
 
-  <section class="reserve-section" id="reserve">
+  <section class="reserve-section reveal" id="reserve">
     <p class="reserve-head">500 bottles. One harvest. Yours is waiting.</p>
     <p class="reserve-sub">Leave your email. One message when your number is assigned. Nothing else.</p>
     <div id="waitlistForm">
@@ -323,16 +463,10 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
       <span class="perk"><span class="perk-dot"></span>Lab report in your box</span>
       <span class="perk"><span class="perk-dot"></span>Hand-numbered bottle</span>
     </div>
-    <div class="spots-wrap">
-      <div class="spots-header">
-        <span class="spots-claimed" id="spotsClaimed">247 of 500 spots claimed</span>
-        <span class="spots-left" id="spotsLeft">253 remaining</span>
-      </div>
-      <div class="spots-track"><div class="spots-fill" id="spotsFill"></div></div>
-    </div>
+    <p class="next-step">You'll hear from me in October, when bottles are numbered. No newsletter. No drip campaign. One email. · Hatem</p>
   </section>
 
-  <footer>
+  <footer class="reveal">
     <div class="footer-id">
       <span>OLIVAEN</span>
       <span>Sfax · Tunisia · France</span>
@@ -347,14 +481,32 @@ footer{margin-top:6rem;padding:2.5rem 0 3.5rem;border-top:1px solid var(--border
 </div>
 
 <script>
-const cur=document.getElementById('cur'),ring=document.getElementById('ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(184,134,26,.5)';});
-  el.addEventListener('mouseleave',()=>{ring.style.width='30px';ring.style.height='30px';ring.style.borderColor='rgba(28,58,14,.35)';});
-});
+// ─── Custom cursor (only runs on pointer:fine devices) ───
+const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+if(isFinePointer){
+  const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.querySelectorAll('a,button,input').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(184,134,26,.5)';});
+    el.addEventListener('mouseleave',()=>{ring.style.width='30px';ring.style.height='30px';ring.style.borderColor='rgba(28,58,14,.35)';});
+  });
+}
+
+// ─── Scroll reveal (IntersectionObserver) ───
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+},{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el=>observer.observe(el));
+
+// ─── Countdown ───
 function tick(){
   const d=new Date('2026-10-01T00:00:00')-new Date();
   if(d<=0)return;
@@ -364,19 +516,13 @@ function tick(){
   document.getElementById('cd-secs').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0');
 }
 tick();setInterval(tick,1000);
-let spots=247;
-function updateBar(){
-  document.getElementById('spotsFill').style.width=(spots/500*100)+'%';
-  document.getElementById('spotsClaimed').textContent=spots+' of 500 spots claimed';
-  document.getElementById('spotsLeft').textContent=(500-spots)+' remaining';
-}
-setTimeout(updateBar,400);
+
+// ─── Waitlist form ───
 function submitWaitlist(){
   const inp=document.getElementById('emailInput');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value.trim())){inp.style.borderColor='rgba(122,46,20,.5)';inp.focus();return;}
   document.getElementById('waitlistForm').style.display='none';
   document.getElementById('waitlistSuccess').style.display='block';
-  if(spots<500){spots++;updateBar();}
 }
 document.getElementById('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')submitWaitlist();});
 document.querySelector('.btn-reserve').addEventListener('click',e=>{e.preventDefault();document.getElementById('reserve').scrollIntoView({behavior:'smooth'});});
